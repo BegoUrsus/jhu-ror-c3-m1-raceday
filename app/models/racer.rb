@@ -99,4 +99,14 @@ class Racer
 			.replace_one(params)
 	end
 
+	# Instance method destroy. This method must:
+	# - Accept no arguments
+	# - Find the racer associated with the current @number instance variable in the database
+	# - Remove that instance from the database
+	def destroy
+		self.class.collection
+			.find(number:@number)
+			.delete_one
+	end
+
 end
