@@ -7,6 +7,18 @@ class Racer
     	"#{@id}: #{@number}, #{@first_name} #{@last_name}, #{@gender}, #{@group}, #{@secs}"
   	end
 
+  	# initialize from both a Mongo and Web hash
+	  def initialize(params={})
+	    #switch between both internal and external views of id and population
+	    @id=params[:_id].nil? ? params[:id] : params[:_id].to_s
+		@number=params[:number].to_i
+		@first_name=params[:first_name]
+		@last_name=params[:last_name]
+		@gender=params[:gender]
+		@group=params[:group]
+		@secs=params[:secs].to_i
+	  end
+
 	#convinience method for access to client in console
 	def self.mongo_client
 		Mongoid::Clients.default
