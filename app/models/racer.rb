@@ -4,8 +4,8 @@ class Racer
 	attr_accessor :id, :number, :first_name, :last_name, :gender, :group, :secs
 
 	def to_s
-    "#{@id}: #{@number}, #{@first_name} #{@last_name}, #{@gender}, #{@group}, #{@secs}"
-  end
+    	"#{@id}: #{@number}, #{@first_name} #{@last_name}, #{@gender}, #{@group}, #{@secs}"
+  	end
 
 	#convinience method for access to client in console
 	def self.mongo_client
