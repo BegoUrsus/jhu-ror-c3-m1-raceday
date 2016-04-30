@@ -67,4 +67,17 @@ class Racer
 		return result.nil? ? nil : Racer.new(result)
 	end
 
+	# Instance method save. 
+	# Creates a new document using the current instance.
+	# This method must:
+	# - Take no arguments
+	# - Insert the current state of the Racer instance into the database
+	# - Obtain the inserted document _id from the result and assign the 
+	# to_s value of the _id to the instance attribute @id	
+	def save
+		result=self.class.collection
+			.insert_one(number:@number, first_name:@first_name, last_name:@last_name, gender:@gender, group:@group, secs:@secs)
+		@id=result.inserted_id.to_s
+	end
+
 end
