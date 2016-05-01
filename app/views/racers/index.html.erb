@@ -16,7 +16,8 @@
   </thead>
 
   <tbody>
-    <% @racers.each do |racer| racer=toRacer(racer)%>     <!-- Added the call to the helper method toRacer -->
+    <% @racers.each do |racer| %>
+      <% racer=toRacer(racer)%>     <!-- convert the mongo document to a Ruby class instance -->
       <tr>
         <td><%= racer.number %></td>
         <td><%= racer.first_name %></td>

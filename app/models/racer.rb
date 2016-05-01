@@ -122,7 +122,9 @@ class Racer
 	#  Completing Active Model Framework #
 	######################################
 
-  	# Instance method persisted?. This method must:
+  	# Instance method persisted?. 
+  	# Check to see if the primary key has been assigned.
+  	# This method must:
 	# - Accept no arguments
 	# - Return true when @id is not nil. 
 	# Remember – we assigned @id during save when we obtained the generated primary key.
@@ -130,7 +132,9 @@ class Racer
 		!@id.nil?
 	end
 
-	# Two instance methods called created_at and updated_at that act as placeholders for property getters. They must:
+	# Two instance methods called created_at and updated_at that act as placeholders for property getters. 
+	# JSON marshalling will expect these two methods to be there by default.
+	# They must:
 	# - Accept no arguments
 	# - Return nil or whatever date you would like. 
 	# This is, of course, just a placeholder until we implement something that does this for real.
@@ -141,5 +145,33 @@ class Racer
 		nil
 	end
 
+	######################
+	#  Adding pagination #
+	######################
 
+	# Add a class method to the Racer class called paginate. This method must:
+	# - Accept a hash as input parameters
+	# - Extract the :page property from that hash, convert to an integer, 
+	#   and default to the value of 1 if not set.
+	# - Extract the :per_page property from that hash, convert to an integer, 
+	#   and default to the value of 30 if not set
+	# - Find all racers sorted by number assending.
+	# - Limit the results to page and limit values.
+	# - Convert each document hash to an instance of a Racer class
+	# - Return a WillPaginate::Collection with the page, limit, 
+	#   and total values filled in – as well as the page worth of data.
+	def self.paginate(params)
+		page=(params[:page] || 1).to_i
+		limit=(params[:per_page] || 30).to_i
+		skip=(page-1)*limit
+		sort = {:number => 1}
+		racers=[]
+		all({}, sort, skip, limit).each do |doc|
+      		racers << Racer.new(doc)
+    	end		
+		total=collection.count
+		WillPaginate::Collection.create(page, limit, total) do |pager|
+			pager.replace(racers)
+		end
+	end
 end

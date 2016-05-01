@@ -7,8 +7,8 @@ class RacersController < ApplicationController
     @racers = Racer.all
   end
 
-  # GET /racers/1
-  # GET /racers/1.json
+  # GET /racers/{id}
+  # GET /racers/{id}.json
   def show
   end
 
