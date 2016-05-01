@@ -1,6 +1,8 @@
 require 'pp'
 
 class Racer
+	include ActiveModel::Model
+
 	# Attributes that allow to set/get each of the following properties:
 	# id, number, first_name, last_name, gender, group and secs
 	attr_accessor :id, :number, :first_name, :last_name, :gender, :group, :secs
@@ -9,7 +11,24 @@ class Racer
     	"#{@id}: #{@number}, #{@first_name} #{@last_name}, #{@gender}, #{@group}, #{@secs}"
   	end
 
-  	# initialize from both a Mongo and Web hash
+	#######################
+	# Database Connection #
+	#######################
+
+	#convinience method for access to client in console
+	def self.mongo_client
+		Mongoid::Clients.default
+	end
+
+	#convinience method for access to racer collection
+	def self.collection
+		self.mongo_client['racers']
+	end
+
+	######################
+	# CRUD Model Methods #
+	######################
+
   	# Initializer that can set the properties of the class using the keys from a racers document. 
   	# It must:
   	# - Accept a hash of properties
@@ -25,16 +44,6 @@ class Racer
 		@gender=params[:gender]
 		@group=params[:group]
 		@secs=params[:secs].to_i
-	end
-
-	#convinience method for access to client in console
-	def self.mongo_client
-		Mongoid::Clients.default
-	end
-
-	#convinience method for access to racer collection
-	def self.collection
-		self.mongo_client['racers']
 	end
 
 	# Class method all. This method must:
@@ -108,5 +117,29 @@ class Racer
 			.find(number:@number)
 			.delete_one
 	end
+
+	######################################
+	#  Completing Active Model Framework #
+	######################################
+
+  	# Instance method persisted?. This method must:
+	# - Accept no arguments
+	# - Return true when @id is not nil. 
+	# Remember – we assigned @id during save when we obtained the generated primary key.
+	def persisted?
+		!@id.nil?
+	end
+
+	# Two instance methods called created_at and updated_at that act as placeholders for property getters. They must:
+	# - Accept no arguments
+	# - Return nil or whatever date you would like. 
+	# This is, of course, just a placeholder until we implement something that does this for real.
+	def created_at
+		nil
+	end
+	def updated_at
+		nil
+	end
+
 
 end
